@@ -9,6 +9,6 @@ This will provide you the basic functionality similar to stop watch in IOS
 
 ![day1](https://user-images.githubusercontent.com/21023833/36474189-c0d6637e-171c-11e8-9060-a82512ffc1a5.gif)
 
-![screenshot_20180221-152747](https://user-images.githubusercontent.com/21023833/36474308-2aebe518-171d-11e8-8407-dd83456f8d39.png)
-![screenshot_20180221-152759](https://user-images.githubusercontent.com/21023833/36474310-2b1c4de8-171d-11e8-82bd-74becc4ad3cd.png)
+![rsz_screenshot_20180221-152747](https://user-images.githubusercontent.com/21023833/36478200-ede7dbce-1729-11e8-8db2-c05c03807980.jpg)
+![rsz_screenshot_20180221-152759](https://user-images.githubusercontent.com/21023833/36478201-ee11ebc6-1729-11e8-8b70-c248510ce03b.jpg)
 
