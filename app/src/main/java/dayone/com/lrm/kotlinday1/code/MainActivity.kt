@@ -8,19 +8,18 @@ import android.os.SystemClock
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.Adapter
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.ToggleButton
+import android.widget.*
 import dayone.com.lrm.kotlinday1.R
 import dayone.com.lrm.kotlinday1.models.TimeSlot
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_time_difference.view.*
+import java.text.DecimalFormat
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
     var millisecondTime:Long = 0L
     var startTime:Long = 0L
@@ -30,6 +29,8 @@ class MainActivity : Activity() {
     var seconds:Int=0
     var minutes:Int=0;
     var milliseconds: Int=0
+
+    private  lateinit var toolbar:Toolbar
 
     var millisecondTimeDif:Long = 0L
     var startTimeDif:Long = 0L
@@ -51,6 +52,7 @@ class MainActivity : Activity() {
     lateinit var timeSlotsList:ArrayList<TimeSlot>
     lateinit var adapter: Adapter<MyAndroidAdapter.ViewHolder>
     var isStop : Boolean= false
+    var formatter = DecimalFormat("00")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +61,28 @@ class MainActivity : Activity() {
         initRecyclerView()
         handler= Handler()
         thread = Thread()
+        toolbar =findViewById(R.id.toolbar)
         //context= this@MainActivity();
         startTimer()
         checkChangeListeners()
-        //creating our adapter
+        initToolbar("Stop-Watch")
 
+
+    }
+
+    fun initToolbar(title: String)
+    {
+            toolbar.setTitleTextColor(resources.getColor(R.color.white))
+            // toolbar.setNavigationIcon(R.drawable.ic_yellow_back);
+            toolbar.title = title
+            //toolbar.setNavigationIcon(R.drawable.ic_back_icon)
+            // add back arrow to toolbar
+            if (supportActionBar != null) {
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                supportActionBar!!.setDisplayShowHomeEnabled(true)
+            }
+            toolbar.setNavigationOnClickListener { onBackPressed() }
+        setSupportActionBar(toolbar)
     }
 
 
@@ -104,8 +123,8 @@ class MainActivity : Activity() {
                         seconds = 0 ;
                         minutes = 0 ;
                         milliseconds = 0 ;
-                        tv_time_clock.text ="00 00 00"
-                        tv_time_diff.text ="00 00 00"
+                        tv_time_clock.text ="00 : 00 : 00"
+                        tv_time_diff.text ="00 : 00 : 00"
                         timeSlotsList.clear();
                         count=0
                         adapter.notifyDataSetChanged()
@@ -114,7 +133,7 @@ class MainActivity : Activity() {
                 }
                 else
                 {
-                   if(!tv_time_clock.text.equals("00 00 00")) {
+                   if(!tv_time_clock.text.equals("00 : 00 : 00")) {
                        //timeBuff += millisecondTime;
                        count = count + 1
                        timeSlotsList.add(TimeSlot(" $count", tv_time_diff.text.toString()))
@@ -124,7 +143,7 @@ class MainActivity : Activity() {
                        startTimeDif=0
                        secondsDif = 0
                        millisecondTimeDif = 0
-                       tv_time_diff.text ="00 00 00"
+                       tv_time_diff.text ="00 : 00 : 00"
                        updateDiffText()
                        startTimeDif = SystemClock.uptimeMillis();
                        handler.postDelayed(runnable, 0);
@@ -171,12 +190,13 @@ class MainActivity : Activity() {
             secondsDif= secondsDif%60
             millisecondsDif =(millisecondTimeDif%1000).toInt()
 
-            mins= java.lang.String.format("%02d",minutesDif)
-            sec= java.lang.String.format("%02d",secondsDif)
-            mSec= java.lang.String.format("%02d",millisecondsDif)
-            tv_time_diff.text= "$mins  $sec  $mSec"
+            mins= String.format("%02d",minutesDif)
+            sec= String.format("%02d",secondsDif)
+            mSec = (millisecondsDif/10).toString()
+            tv_time_diff.text= "$mins : $sec : $mSec"
 
         }
+        fun Double.format1(digits: Int) = java.lang.String.format("%${digits}f", this)
 
         fun updateTimerText()
         {
@@ -186,10 +206,11 @@ class MainActivity : Activity() {
             seconds= seconds%60
             milliseconds =(updateTime%1000).toInt()
 
-            mins= java.lang.String.format("%02d",minutes)
-            sec= java.lang.String.format("%02d",seconds)
-            mSec= java.lang.String.format("%02d",milliseconds)
-            tv_time_clock.text= "$mins  $sec  $mSec"
+            mins= String.format("%02d",minutes)
+            sec= String.format("%02d",seconds)
+            //mSec=milliseconds.format1(2)
+            mSec = (milliseconds/10).toString()
+            tv_time_clock.text= "$mins : $sec : $mSec"
         }
 
 
@@ -231,6 +252,8 @@ class MainActivity : Activity() {
                 }
             }
         }
+
+
 }
 
 
